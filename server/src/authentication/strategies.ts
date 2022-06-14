@@ -1,6 +1,9 @@
 import * as buffer from "buffer";
 import dotenv from "dotenv-flow";
-dotenv.config()
+import User from "../models/User";
+import {IUser} from "../models/interfaces/IUser";
+import {Error} from "mongoose";
+
 
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
@@ -10,7 +13,21 @@ export const Google = new GoogleStrategy({
         callbackURL: "/auth/google/callback"
     },
     function (accessToken: any, refreshToken: any , profile: any, cb: any){
-        console.log(profile)
+        User.findOne({googleId: profile.id}, async (err: Error, doc: IUser) => {
+            if(err){
+                return cb(err, null)
+            }
+            if(!doc){
+                const newUser = new User({
+                    googleId: profile.id,
+                    firstName: profile.name.givenName,
+                    lastName: profile.name.familyName,
+                    email: profile.emails[0].value
+                })
+                await newUser.save();
+            }
+        })
+
         cb(null, profile)
     }
 )

@@ -1,13 +1,14 @@
+import dotenv from "dotenv-flow"
+dotenv.config()
+
 import express from "express"
 import mongoose from "mongoose"
-import dotenv from "dotenv-flow"
 import * as process from "process";
 import cors from "cors";
 import session from "express-session";
 import passport from "passport";
 import {Google as GoogleStrategy} from "./authentication/strategies";
 
-dotenv.config()
 
 //middleware
 const app = express();
