@@ -7,7 +7,6 @@ import * as process from "process";
 import cors from "cors";
 import session from "express-session";
 import passport from "passport";
-import {Google as GoogleStrategy} from "./authentication/strategies";
 import passportConfig from "./authentication/passportConfig";
 import authRoute from "./routes/auth.route";
 
