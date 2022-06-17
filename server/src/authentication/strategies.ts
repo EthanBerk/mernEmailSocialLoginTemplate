@@ -1,6 +1,6 @@
 
 import User from "../models/User.model";
-import {IUser} from "../models/interfaces/user";
+import {IMongoDBUser, IUser} from "../models/interfaces/user";
 import {Error} from "mongoose";
 import {Profile} from "passport";
 
@@ -12,8 +12,8 @@ export const Google = new GoogleStrategy({
         clientSecret: `${process.env.GOOGLE_CLIENT_SECRET}`,
         callbackURL: "/auth/google/callback"
     },
-    function (accessToken: any, refreshToken: any , profile: Profile, cb: any){
-        User.findOne({googleId: profile.id}, async (err: Error, doc: IUser) => {
+    function (_: any, __: any , profile: Profile, cb: any){
+        User.findOne({googleId: profile.id}, async (err: Error, doc: IMongoDBUser) => {
             if(err){
                 return cb(err, null)
             }
@@ -25,9 +25,9 @@ export const Google = new GoogleStrategy({
                     email: profile.emails[0].value
                 })
                 await newUser.save();
+                cb(null, newUser)
             }
+            cb(null, doc)
         })
-
-        cb(null, profile)
     }
 )

@@ -14,7 +14,7 @@ import authRoute from "./routes/auth.route";
 //middleware
 const app = express();
 app.use(express.json())
-app.use(cors({ origin: "|||||||||", credentials: true }))
+app.use(cors({ origin: "http://localhost:3000", credentials: true }))
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: true,
@@ -31,6 +31,9 @@ mongoose.connect(process.env.SCOUT_DB_URI, {}, (err) => {
 passportConfig(passport);
 
 app.use("/auth", authRoute);
+app.get("/", (req, res) => {
+    res.send("Hello World")
+})
 
 const port = process.env.PORT || 5000; // process.env.port is Heroku's port
 app.listen(port, () => console.log(`Server up and running on port ${port}`))
